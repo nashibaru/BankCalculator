@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="BankCalculator.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:BankCalculator"
+    xmlns:xViews="clr-namespace:BankCalculator.xViews"
+    Shell.FlyoutBehavior="Disabled"
+    Title="BankCalculator">
+
+    <ShellContent ContentTemplate="{DataTemplate xViews:Landing}" Route="MainPage"/>
+    <ShellContent ContentTemplate="{DataTemplate xViews:HolidayCalc}" Route="HoliCalc"/>
+    <ShellContent ContentTemplate="{DataTemplate xViews:DepositCalc}" Route="DepoCalc"/>
+    <ShellContent ContentTemplate="{DataTemplate xViews:EstimateCalc}" Route="EstiCalc"/>
+
+</Shell>

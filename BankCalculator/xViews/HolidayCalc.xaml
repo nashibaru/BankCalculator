@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:BankCalculator.xViewModels"
+             x:DataType="vm:HoliCalcVM"
+             x:Class="BankCalculator.xViews.HolidayCalc"
+             Title="Kalkulator - wakacje kredytowe"
+>
+    <ScrollView>
+        <VerticalStackLayout HorizontalOptions="Center" WidthRequest="300">
+
+            <VerticalStackLayout x:Name="People" Margin="10" HorizontalOptions="Center">
+                <Label Text="PESEL Wnioskodawcy"/>
+                <Entry x:Name="peselek"
+                       MaxLength="11"
+                       Keyboard="Numeric"
+                       TextChanged="PeselEntry"
+                       Text="{Binding Pesel}"
+                       WidthRequest="200"
+                />
+            </VerticalStackLayout>
+
+            <HorizontalStackLayout Margin="10" HorizontalOptions="Center">
+                <ListView x:Name="clientlist" IsVisible="False" ItemsSource="{Binding Pesels}" WidthRequest="100">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextCell Text="{Binding .}" />
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <Button x:Name="add"
+                        Text="Dodaj"
+                        Clicked="AddClient"
+                        Command="{Binding AddClientCommand}"
+                        WidthRequest="75"
+                        Margin="12.5,0"
+                />
+            </HorizontalStackLayout>
+
+            <VerticalStackLayout x:Name="Lend" Margin="10" HorizontalOptions="Center">
+                <Label Text="Kwota kredytu"/>
+                <Entry x:Name="lendAmount"
+                       Keyboard="Numeric"
+                       TextChanged="MoneyEntry"
+                       Text="{Binding LendAmount}"
+                       MaxLength="11"
+                       WidthRequest="200"
+                />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout x:Name="StartDate" Margin="10" HorizontalOptions="Center">
+                <Label Text="Data uruchomienia"/>
+                <DatePicker x:Name="startDate" Date="{Binding StartDate}" WidthRequest="200"/>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout x:Name="Children" Margin="10" HorizontalOptions="Center">
+                <Label Text="Ilość dzieci"/>
+                <StackLayout>
+                    <RadioButton Content="Mniej niż 3" CheckedChanged="ProcessToRDD" IsChecked="{Binding Option.OptionOne}" WidthRequest="200"/>
+                    <RadioButton Content="3 lub więcej" CheckedChanged="ProcessToRDD" IsChecked="{Binding Option.OptionTwo}" WidthRequest="200"/>
+                </StackLayout>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout x:Name="AdditionalFields" IsVisible="False"  Margin="10" HorizontalOptions="Center">
+                <Label Text="Raty kredytu oraz dochody/os. z ostatnich 3 miesięcy przed miesiącem uruchomienia" WidthRequest="200"/>
+                <HorizontalStackLayout>
+                    <Entry Placeholder="Rata 1"
+                           Keyboard="Numeric"
+                           Text="{Binding MonthAgoData.Invment}"
+                           TextChanged="MoneyEntry"
+                           WidthRequest="100"
+                           MaxLength="10"
+                    />
+                    <Entry Placeholder="Dochód 1"
+                           Keyboard="Numeric"
+                           Text="{Binding MonthAgoData.Gain}"
+                           TextChanged="MoneyEntry"
+                           WidthRequest="100"
+                           MaxLength="10"
+                    />
+                </HorizontalStackLayout>
+                <HorizontalStackLayout>
+                    <Entry Placeholder="Rata 2"
+                           Keyboard="Numeric"
+                           Text="{Binding TwoMonthsAgoData.Invment}"
+                           TextChanged="MoneyEntry"
+                           WidthRequest="100"
+                           MaxLength="10"
+                    />
+                    <Entry Placeholder="Dochód 2"
+                           Keyboard="Numeric"
+                           Text="{Binding TwoMonthsAgoData.Gain}"
+                           TextChanged="MoneyEntry"
+                           WidthRequest="100"
+                           MaxLength="10"
+                    />
+                </HorizontalStackLayout>
+                <HorizontalStackLayout>
+                    <Entry Placeholder="Rata 3"
+                           Keyboard="Numeric"
+                           Text="{Binding ThreeMonthsAgoData.Invment}"
+                           TextChanged="MoneyEntry"
+                           WidthRequest="100"
+                           MaxLength="10"
+                    />
+                    <Entry Placeholder="Dochód 3"
+                           Keyboard="Numeric"
+                           Text="{Binding ThreeMonthsAgoData.Gain}"
+                           TextChanged="MoneyEntry"
+                           WidthRequest="100"
+                           MaxLength="10"
+                    />
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+
+            <HorizontalStackLayout Margin="10" HorizontalOptions="Center">
+                <Button Text="Wstecz" Command="{Binding UndoCommand}" Clicked="ResetForm" WidthRequest="75"/>
+                <Button Text="Reset" Clicked="ResetForm" Margin="12.5,0" WidthRequest="75"/>
+                <Button Text="Oblicz" Command="{Binding HolidayCalculateCommand}" WidthRequest="75"/>
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

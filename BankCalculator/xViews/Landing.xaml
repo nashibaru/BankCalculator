@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BankCalculator.xViews.Landing"
+             xmlns:vm="clr-namespace:BankCalculator.xViewModels"
+             Title="Landing"
+             x:DataType="vm:LandingVM"
+>
+    <ScrollView>
+        <VerticalStackLayout>
+
+            <Button Text="Wakacje kredytowe"
+                    Margin="30,15"
+                    WidthRequest="200"
+                    Command="{Binding GoToHoliCalcCommand}"
+            />
+            <Button Text="Lokata"
+                    Margin="30,15"
+                    WidthRequest="200"
+                    Command="{Binding GoToDepoCalcCommand}"
+            />
+            <Button Text="Kredyt - kosztorys"
+                    Margin="30,15"
+                    WidthRequest="200"
+                    Command="{Binding GoToEstiCalcCommand}"
+            />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

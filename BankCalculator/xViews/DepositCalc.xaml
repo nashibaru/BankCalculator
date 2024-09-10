@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:BankCalculator.xViewModels"
+             x:DataType="vm:DepoCalcVM"
+             x:Class="BankCalculator.xViews.DepositCalc"
+             Title="Kalkulator - lokaty">
+    <ScrollView>
+        <VerticalStackLayout HorizontalOptions="Center">
+
+            <VerticalStackLayout x:Name="Depo" Margin="10">
+                <Label Text="Kwota depozytu"/>
+                <Entry x:Name="MoneyAmount"
+                       Keyboard="Numeric"
+                       TextChanged="MoneyEntry"
+                       Text="{Binding DepoAmount}"
+                       MaxLength="11"
+                />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout x:Name="Perc" Margin="10">
+                <Label Text="Oprocentowanie w skali roku"/>
+                <HorizontalStackLayout>
+                    <Slider x:Name="sliderOne" Minimum="1" Maximum="10" Value="{Binding Percentage}" WidthRequest="200"/>
+                    <Label Text="{Binding  Source={x:Reference sliderOne}, Path=Value, StringFormat='{}{0:F1}'}" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Margin="20,0,0,0"/>
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout x:Name="Dur" Margin="10">
+                <Label Text="Okres depozytu"/>
+                <HorizontalStackLayout>
+                    <Slider x:Name="sliderTwo" Minimum="1" Maximum="12" Value="{Binding Duration}" WidthRequest="200"/>
+                    <Label Text="{Binding Source={x:Reference sliderTwo}, Path=Value, StringFormat='{}{0:F0}'}" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Margin="20,0,0,0"/>
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+
+            <HorizontalStackLayout Margin="10">
+                <Button Text="Wstecz" WidthRequest="75" Margin="12.5,0" Command="{Binding UndoCommand}"/>
+                <Button x:Name="DepoCalc" Text="Oblicz" Command="{Binding DepositCalculateCommand}" WidthRequest="75" Margin="12.5,0"/>
+                <Label Text="{Binding DepoValue}" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Margin="20,0,0,0"/>
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:BankCalculator.xViewModels"
+             xmlns:models="clr-namespace:BankCalculator.xModels"
+             x:DataType="vm:EstiCalcVM"
+             x:Class="BankCalculator.xViews.EstimateCalc"
+             Title="EstimateCalc">
+    <ScrollView>
+        <VerticalStackLayout MinimumWidthRequest="200" HorizontalOptions="Center">
+
+            <VerticalStackLayout x:Name="People" Margin="10" HorizontalOptions="Start" MinimumWidthRequest="200">
+                <Label Text="Wnioskodawca" MinimumWidthRequest="200"/>
+                <Entry MaxLength="60" Text="{Binding Applicants}" MinimumWidthRequest="200"/>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout x:Name="Address" Margin="10" HorizontalOptions="Start">
+                <Label Text="Adres nieruchomości / nr działki" MinimumWidthRequest="200"/>
+                <Entry MaxLength="100" Text="{Binding Address}" MinimumWidthRequest="200"/>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout x:Name="Finish" Margin="10" HorizontalOptions="Start">
+                <Label Text="Planowany termin zakończenia inwestycji" MinimumWidthRequest="200"/>
+                <DatePicker x:Name="finish" Date="{Binding Finish}" MinimumWidthRequest="120"/>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout x:Name="Area" Margin="10" HorizontalOptions="Start">
+                <Label Text="Powierzchnia użytkowa domu (m2)" MinimumWidthRequest="200"/>
+                <Entry MaxLength="8"
+                       Keyboard="Numeric"
+                       TextChanged="DoubleEntry"
+                       Text="{Binding Area}"
+                       MinimumWidthRequest="120"
+                />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout x:Name="AreaValue" Margin="10" HorizontalOptions="Start">
+                <Label Text="Wartość działki" MinimumWidthRequest="200"/>
+                <Entry MaxLength="11"
+                       Keyboard="Numeric"
+                       TextChanged="DoubleEntry"
+                       Text="{Binding AreaValue}"
+                       MinimumWidthRequest="120"
+                />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout x:Name="Prev" Margin="10" HorizontalOptions="Start">
+                <Label Text="Wartość obecna pierwszego kredytu / wkładu własnego" MinimumWidthRequest="200"/>
+                <HorizontalStackLayout>
+                    <Entry MaxLength="11"
+                           Keyboard="Numeric"
+                           TextChanged="DoubleEntry"
+                           Text="{Binding LendValue}"
+                           MinimumWidthRequest="75"
+                    />
+                    <Entry MaxLength="11"
+                           Keyboard="Numeric"
+                           TextChanged="DoubleEntry"
+                           Text="{Binding OwnedValue}"
+                           MinimumWidthRequest="75"
+                    />
+                </HorizontalStackLayout>
+
+            </VerticalStackLayout>
+
+            <VerticalStackLayout x:Name="AreaValueEst" Margin="10" HorizontalOptions="Start">
+                <Label Text="Wartość nieruchomości po ukończeniu (wycena)" MinimumWidthRequest="200"/>
+                <Entry MaxLength="11"
+                       Keyboard="Numeric"
+                       TextChanged="DoubleEntry"
+                       Text="{Binding AreaValueEst}"
+                       MinimumWidthRequest="120"
+                />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Margin="0,30,0,0">
+                
+                <VerticalStackLayout Margin="10" HorizontalOptions="Start" MinimumWidthRequest="200">
+                    <Label Text="Nazwa elementu" MinimumWidthRequest="200"/>
+                    <Entry x:Name="ElementName" MaxLength="60" Text="{Binding ElementName}" MinimumWidthRequest="200"/>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Margin="10" HorizontalOptions="Start" MinimumWidthRequest="200">
+                    <Label Text="Nazwa grupy" MinimumWidthRequest="200"/>
+                    <Picker ItemsSource="{Binding Options}" SelectedItem="{Binding ElementGroup}" MinimumWidthRequest="200"/>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Margin="10" HorizontalOptions="Start" MinimumWidthRequest="200">
+                    <Label Text="Koszt / Zaawansowanie" MinimumWidthRequest="200"/>
+                    <HorizontalStackLayout>
+                        <Entry x:Name="Cost" Placeholder="Koszt" TextChanged="DoubleEntry" MaxLength="8" Text="{Binding Cost}" Margin="0,0,12.5,0" MinimumWidthRequest="75"/>
+                        <Entry x:Name="Advance" Placeholder="Zaawansowanie" TextChanged="DoubleEntry" MaxLength="8" Text="{Binding Advance}" Margin="12.5,0,0,0" MinimumWidthRequest="75"/>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Margin="10" HorizontalOptions="Start" MinimumWidthRequest="200">
+                    <Label Text="Środki własne" MinimumWidthRequest="200"/>
+                    <HorizontalStackLayout>
+                        <Entry x:Name="Owned" TextChanged="DoubleEntry" MaxLength="8" Text="{Binding Owned}" Margin="0,0,12.5,0" MinimumWidthRequest="75"/>
+                        <Button Text="Dodaj" Clicked="AppearList" Command="{Binding AddElementCommand}" WidthRequest="75" Margin="12.5,0,0,0"/>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Margin="10" x:Name="elements" IsVisible="False">
+
+                    <Grid ColumnDefinitions="*,*,*,*,*,*">
+                        <Label Text="Nazwa Elementu" Grid.Column="0" FontAttributes="Bold" />
+                        <Label Text="Grupa Elementu" Grid.Column="1" FontAttributes="Bold" />
+                        <Label Text="Koszt (PLN)" Grid.Column="2" FontAttributes="Bold" />
+                        <Label Text="Zaawansowanie (PLN)" Grid.Column="3" FontAttributes="Bold" />
+                        <Label Text="Środki własne (PLN)" Grid.Column="4" FontAttributes="Bold" />
+                    </Grid>
+
+                    <ListView x:Name="elementlist" ItemsSource="{Binding Elements}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <Grid ColumnDefinitions="*,*,*,*,*,*">
+
+                                        <Label Text="{Binding ElementName}" Grid.Column="0" Padding="0,7.5,15,7.5"/>
+                                        <Label Text="{Binding ElementGroup}" Grid.Column="1" Padding="0,7.5,15,7.5"/>
+                                        <Label Text="{Binding Cost}" Grid.Column="2" Padding="0,7.5,15,7.5"/>
+                                        <Label Text="{Binding Advance}" Grid.Column="3" Padding="0,7.5,15,7.5"/>
+                                        <Label Text="{Binding Owned}" Grid.Column="4" Padding="0,7.5,15,7.5"/>
+
+                                        <Button Text="Usuń"
+                                                WidthRequest="75"
+                                                MinimumHeightRequest="5"
+                                                Grid.Column="5"
+                                                Command="{Binding Source={x:Reference elementlist}, Path=BindingContext.RemoveElementCommand}"
+                                                CommandParameter="{Binding .}"
+                                                Clicked="AppearList"
+                                        />
+
+                                    </Grid>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </VerticalStackLayout>
+
+                <Button Text="Pokaż podsumowanie" Clicked="Button_Clicked" Command="{Binding GetEstimationCommand}" WidthRequest="200"/>
+
+            </VerticalStackLayout>
+
+            <VerticalStackLayout x:Name="Summary" Margin="10,30,0,0" IsVisible="False">
+                <Label Text="Podsumowanie kosztorysu" FontSize="Medium"/>
+
+                <HorizontalStackLayout Margin="0,20,0,0">
+                    <Label Text="Wnioskodawca" MinimumWidthRequest="330" FontAttributes="Bold"/>
+                    <Label Text="{Binding Applicants}"/>
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout>
+                    <Label Text="Adres nieruchomości / nr działki" MinimumWidthRequest="330" FontAttributes="Bold"/>
+                    <Label Text="{Binding Address}"/>
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout>
+                    <Label Text="Planowany termin zakończenia inwestycji" MinimumWidthRequest="330" FontAttributes="Bold"/>
+                    <Label Text="{Binding Finish, StringFormat='{0:d}'}"/>
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout>
+                    <Label Text="Powierzchnia użytkowa domu (m2)" MinimumWidthRequest="330" FontAttributes="Bold"/>
+                    <Label Text="{Binding Area}"/>
+                    <Label Text=" m"/>
+                    <Label Text="2" FontSize="9"/>
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout>
+                    <Label Text="Wartość działki" MinimumWidthRequest="330" FontAttributes="Bold"/>
+                    <Label Text="{Binding AreaValue}"/>
+                    <Label Text=" PLN"/>
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout Margin="0,10,0,0">
+                    <Label Text="Wartość nieruchomości po ukończeniu (wycena)" MinimumWidthRequest="330" FontAttributes="Bold"/>
+                    <Label Text="{Binding AreaValueEst}"/>
+                    <Label Text=" PLN"/>
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout>
+                    <Label Text="Dotychczasowa wartość kredytu" MinimumWidthRequest="330" FontAttributes="Bold"/>
+                    <Label Text="{Binding LendValue}"/>
+                    <Label Text=" PLN"/>
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout>
+                    <Label Text="Wskaźnik kredyt-do-wyceny" MinimumWidthRequest="330" FontAttributes="Bold"/>
+                    <Label Text="{Binding Estimate.Ltv, StringFormat='{}{0:F2}'}"/>
+                    <Label Text="%"/>
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout>
+                    <Label Text="Dotychczasowa wartość wkładu własnego" MinimumWidthRequest="330" FontAttributes="Bold"/>
+                    <Label Text="{Binding OwnedValue}"/>
+                    <Label Text=" PLN"/>
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout>
+                    <Label Text="Dotychczasowe nakłady inwestycyjne" MinimumWidthRequest="330" FontAttributes="Bold"/>
+                    <Label Text="{Binding Estimate.AllValueStr}"/>
+                    <Label Text=" PLN"/>
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout Margin="0,10,0,0">
+                    <Label Text="Wartość elementów nieukończonych" MinimumWidthRequest="330" FontAttributes="Bold"/>
+                    <Label Text="{Binding Estimate.CostSumStr}"/>
+                    <Label Text=" PLN"/>
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout>
+                    <Label Text="Zaawansowanie elementów nieukończonych" MinimumWidthRequest="330" FontAttributes="Bold"/>
+                    <Label Text="{Binding Estimate.AdvanceSumStr}"/>
+                    <Label Text=" PLN"/>
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout>
+                    <Label Text="Wkład własny na elementy nieukończone" MinimumWidthRequest="330" FontAttributes="Bold"/>
+                    <Label Text="{Binding Estimate.OwnedSumStr}"/>
+                    <Label Text=" PLN"/>
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout Margin="0,10,0,0">
+                    <Label Text="Maksymalna możliwa kwota kredytu" MinimumWidthRequest="330" FontAttributes="Bold"/>
+                    <Label Text="{Binding Estimate.MaxLendStr}"/>
+                    <Label Text=" PLN"/>
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout>
+                    <Label Text="Kwota kredytu dofinansowującego" MinimumWidthRequest="330" FontAttributes="Bold"/>
+                    <Label Text="{Binding Estimate.ToLendStr}"/>
+                    <Label Text=" PLN"/>
+                </HorizontalStackLayout>
+
+            </VerticalStackLayout>
+
+            <HorizontalStackLayout>
+                <Button Text="Wstecz" Clicked="Clearing" Command="{Binding UndoCommand}" HorizontalOptions="Start" Margin="10"/>
+                <Button Text="Generuj PDF" x:Name="PDF" IsEnabled="False" Command="{Binding GeneratePDFCommand}" HorizontalOptions="Start" Margin="10"/>
+            </HorizontalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
